@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "cl-plugin-template"
+rootProject.name = "minecartboost"
 
 dependencyResolutionManagement {
     repositories {
