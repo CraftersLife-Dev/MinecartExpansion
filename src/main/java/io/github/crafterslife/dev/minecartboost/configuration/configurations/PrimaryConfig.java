@@ -21,8 +21,11 @@ package io.github.crafterslife.dev.minecartboost.configuration.configurations;
 
 import io.github.crafterslife.dev.minecartboost.configuration.Header;
 import io.github.crafterslife.dev.minecartboost.configuration.annotations.ConfigName;
+import org.bukkit.Material;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+import java.util.Map;
 
 /**
  * プラグインのメイン設定。
@@ -33,10 +36,16 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @Header("""
         プラグインのメイン設定です。
         """)
-public record PrimaryConfig() {
-
+public record PrimaryConfig(
+        int maxSpeed,
+        Map<Material,Double> velocityModifyBlocks
+) {
     /**
      * メイン設定のデフォルト設定。
      */
-    public static final PrimaryConfig DEFAULT = new PrimaryConfig();
+    public static final PrimaryConfig DEFAULT = new PrimaryConfig(
+            10,
+            Map.of(Material.GOLD_BLOCK,1.25,
+                    Material.IRON_BLOCK,0.95)
+    );
 }

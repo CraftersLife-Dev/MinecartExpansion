@@ -47,5 +47,6 @@ public final class JavaPluginImpl extends JavaPlugin {
     @Override
     public void onEnable() {
         /* templateServiceをリスナーに渡す */
+        Bukkit.getPluginManager().registerEvents(new RailSpeedListener(resourceContainer.primaryConfig()), this);
     }
 }
