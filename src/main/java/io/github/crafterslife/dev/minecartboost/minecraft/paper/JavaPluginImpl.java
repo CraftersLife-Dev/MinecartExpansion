@@ -20,6 +20,7 @@
 package io.github.crafterslife.dev.minecartboost.minecraft.paper;
 
 import io.github.crafterslife.dev.minecartboost.ResourceContainer;
+import io.github.crafterslife.dev.minecartboost.minecraft.paper.listeners.RailExtendListener;
 import io.github.crafterslife.dev.minecartboost.minecraft.paper.listeners.RailSpeedListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,5 +49,6 @@ public final class JavaPluginImpl extends JavaPlugin {
     public void onEnable() {
         /* templateServiceをリスナーに渡す */
         Bukkit.getPluginManager().registerEvents(new RailSpeedListener(resourceContainer.primaryConfig()), this);
+        Bukkit.getPluginManager().registerEvents(new RailExtendListener(resourceContainer.primaryConfig()),this);
     }
 }
