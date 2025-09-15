@@ -19,7 +19,9 @@
  */
 package io.github.crafterslife.dev.minecartboost.minecraft.paper;
 
-import io.github.crafterslife.dev.minecartboost.ServiceContainer;
+import io.github.crafterslife.dev.minecartboost.ResourceContainer;
+import io.github.crafterslife.dev.minecartboost.minecraft.paper.listeners.RailSpeedListener;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
 
@@ -31,15 +33,15 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public final class JavaPluginImpl extends JavaPlugin {
 
-    private final ServiceContainer serviceContainer;
+    private final ResourceContainer resourceContainer;
 
     /**
      * このクラスの新しいインスタンスを生成します。
      *
      * @param serviceContainer サービスロジックコンテナ
      */
-    public JavaPluginImpl(final ServiceContainer serviceContainer) {
-        this.serviceContainer = serviceContainer;
+    public JavaPluginImpl(final ResourceContainer serviceContainer) {
+        this.resourceContainer = serviceContainer;
     }
 
     @Override

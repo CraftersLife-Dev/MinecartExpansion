@@ -55,7 +55,7 @@ public final class PluginBootstrapImpl implements PluginBootstrap {
         });
 
         // Create plugin supplier
-        this.javaPlugin = () -> new JavaPluginImpl(serviceContainer);
+        this.javaPlugin = () -> new JavaPluginImpl(resourceContainer);
     }
 
     @Override
