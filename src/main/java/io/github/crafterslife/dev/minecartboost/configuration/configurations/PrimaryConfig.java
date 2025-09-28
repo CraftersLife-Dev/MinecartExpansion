@@ -38,7 +38,8 @@ import java.util.Map;
         """)
 public record PrimaryConfig(
         int maxSpeed,
-        Map<Material,Double> velocityModifyBlocks
+        Map<Material,Double> velocityModifyBlocks,
+        int maxPlace
 ) {
     /**
      * メイン設定のデフォルト設定。
@@ -46,6 +47,7 @@ public record PrimaryConfig(
     public static final PrimaryConfig DEFAULT = new PrimaryConfig(
             10,
             Map.of(Material.GOLD_BLOCK,1.25,
-                    Material.IRON_BLOCK,0.95)
+                    Material.IRON_BLOCK,0.95),
+            5
     );
 }

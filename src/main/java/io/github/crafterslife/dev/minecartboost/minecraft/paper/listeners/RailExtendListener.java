@@ -15,13 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class RailExtendListener implements Listener {
-    private final ResourceContainer resourceContainer = null;
+    private final ResourceContainer resourceContainer;
+    private final PrimaryConfig primaryConfig;
 
-    public RailExtendListener(PrimaryConfig primaryConfig) {
+    public RailExtendListener(PrimaryConfig primaryConfig,ResourceContainer resourceContainer) {
+        this.resourceContainer = resourceContainer;
+        this.primaryConfig = primaryConfig;
     }
-
-    private static final int MAX_PLACE = 1000;
-    private static final String NO_SPACE_MESSAGE = "指定範囲内に設置可能な場所がありません！";
 
     @EventHandler
     public void onRailClick(PlayerInteractEvent event) {
@@ -40,7 +40,7 @@ public class RailExtendListener implements Listener {
         Block placeable = findFirstPlaceable(clicked, direction);
 
         if (placeable == null) {
-            player.sendMessage(NO_SPACE_MESSAGE);
+            this.resourceContainer.messageService().sample().send(player);
             return;
         }
 
@@ -64,9 +64,10 @@ public class RailExtendListener implements Listener {
         };
     }
 
-    private static Block findFirstPlaceable(Block clicked, Vector direction) {
+    private Block findFirstPlaceable(Block clicked, Vector direction) {
+        var MAX_PLACE = this.primaryConfig.maxPlace();
         Location base = clicked.getLocation().clone();
-        for (int i = 1; i <= RailExtendListener.MAX_PLACE; i++) {
+        for (int i = 1; i <= MAX_PLACE; i++) {
             Location targetLoc = base.clone().add(direction.clone().multiply(i));
             Block target = targetLoc.getBlock();
             Block under = target.getRelative(0, -1, 0);
