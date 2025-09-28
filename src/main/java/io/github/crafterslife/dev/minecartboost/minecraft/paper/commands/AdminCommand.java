@@ -20,10 +20,8 @@
 package io.github.crafterslife.dev.minecartboost.minecraft.paper.commands;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.github.crafterslife.dev.minecartboost.ServiceContainer;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -35,18 +33,6 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
 public final class AdminCommand implements InternalCommand {
-
-    private final ServiceContainer serviceContainer;
-
-    /**
-     * 新しい{@code AdminCommand}インスタンスを構築します。
-     *
-     * @param serviceContainer サービスロジックコンテナ
-     */
-    @Contract(pure = true)
-    public AdminCommand(final ServiceContainer serviceContainer) {
-        this.serviceContainer = serviceContainer;
-    }
 
     /**
      * 管理者が使用するためのメインコマンドを構築します。
