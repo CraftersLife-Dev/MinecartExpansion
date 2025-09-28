@@ -40,8 +40,8 @@ public interface MessageService {
      *
      * @return メッセージインスタンス
      */
-    @Key("template.sample")
-    @Value(locale = Locales.EN_US, content = "<info>Hello, World!")
-    @Value(locale = Locales.JA_JP, content = "<info>こんにちは、世界！")
-    Message sample();
+    @Key("minecartExpansion.nospace")
+    @Value(locale = Locales.EN_US, content = "<warn>No space available !")
+    @Value(locale = Locales.JA_JP, content = "<warn>空きスペースがありません！")
+    Message noSpace();
 }

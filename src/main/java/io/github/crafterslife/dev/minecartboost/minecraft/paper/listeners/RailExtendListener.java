@@ -40,7 +40,7 @@ public class RailExtendListener implements Listener {
         Block placeable = findFirstPlaceable(clicked, direction);
 
         if (placeable == null) {
-            this.resourceContainer.messageService().sample().send(player);
+            this.resourceContainer.messageService().noSpace().send(player);
             return;
         }
 
