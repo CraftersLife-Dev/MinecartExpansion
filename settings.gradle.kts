@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "minecartboost"
+rootProject.name = "minecartexpansion"
 
 dependencyResolutionManagement {
     repositories {

@@ -34,9 +34,9 @@ dependencies {
     annotationProcessor(libs.doburoku.annotation.processor)
 }
 
-val mainPackage = "$group.minecartboost"
+val mainPackage = "$group.minecartexpansion"
 paperPluginYaml {
-    name = "MinecartBoost"
+    name = "MinecartExpansion"
     author = "すだち"
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
