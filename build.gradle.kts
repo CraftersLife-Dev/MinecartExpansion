@@ -29,21 +29,22 @@ dependencies {
     compileOnly(libs.configurate.yaml) // Paperに組み込んである
     runtimeDownload(libs.adventure.serializer.configurate)
     implementation(libs.doburoku.standard)
+    implementation(libs.evalex)
 
     // Annotation processor
     annotationProcessor(libs.doburoku.annotation.processor)
 }
 
-val mainPackage = "$group.minecartboost"
+val mainPackage = "$group.minecartexpansion"
 paperPluginYaml {
-    name = "MinecartBoost"
+    name = "MinecartExpansion"
     author = "すだち"
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
 
-    main = "$mainPackage.minecraft.paper.JavaPluginImpl"
-    bootstrapper = "$mainPackage.minecraft.paper.PluginBootstrapImpl"
-    loader = "$mainPackage.minecraft.paper.PluginLoaderImpl"
+    main = "$mainPackage.JavaPluginImpl"
+    bootstrapper = "$mainPackage.PluginBootstrapImpl"
+    loader = "$mainPackage.PluginLoaderImpl"
 
     permissions {
         register("${paperPluginYaml.name.get().lowercase()}.command.admin") {

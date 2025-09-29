@@ -13,6 +13,7 @@ mini-placeholders = "3.0.1"
 configurate = "4.2.0"
 adventure-serializer-configurate = "4.24.0"
 doburoku = "1.0.0-SNAPSHOT"
+evalex = "3.5.0"
 
 [libraries]
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
@@ -21,6 +22,7 @@ configurate-yaml = { group = "org.spongepowered", name = "configurate-yaml", ver
 adventure-serializer-configurate = { group = "net.kyori", name = "adventure-serializer-configurate4", version.ref = "adventure-serializer-configurate" }
 doburoku-standard = { group = "io.github.namiuni", name = "doburoku-standard", version.ref = "doburoku"}
 doburoku-annotation-processor = { group = "io.github.namiuni", name = "doburoku-annotation-processor", version.ref = "doburoku"}
+evalex = { group = "com.ezylang", name = "EvalEx", version.ref = "evalex"}
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
