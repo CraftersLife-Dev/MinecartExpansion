@@ -39,6 +39,7 @@ val mainPackage = "$group.minecartexpansion"
 paperPluginYaml {
     name = "MinecartExpansion"
     author = "すだち"
+    contributors = listOf("Namiu (うにたろう)")
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
 
