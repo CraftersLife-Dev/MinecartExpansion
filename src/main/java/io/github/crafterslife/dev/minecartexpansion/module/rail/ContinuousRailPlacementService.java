@@ -26,6 +26,7 @@ import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Rail;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -57,35 +58,38 @@ public final class ContinuousRailPlacementService {
     }
 
     /**
-     * レールを延伸します。
+     * レールを延伸し、プレイヤーがメインハンドに持っているレールアイテムを消費します。
      *
-     * <p>このメソッドは、ベースとなるレールからプレイヤーが見ている方向の東西南北にレールを伸ばそうと試みます。</p>
+     * <p>このメソッドは、ベースとなるレールからプレイヤーが見ている方向の東西南北にレールを伸ばそうと試みます。
+     * レールの延伸に成功した場合、プレイヤーのメインハンドのアイテムを消費します。</p>
      *
      * @param player レールの延伸を試行するプレイヤー
      * @param startRail スタート位置となるレールブロック
-     * @param railItem 消費するレールアイテム
      */
-    public void placeContinuousRail(final Player player, final Block startRail, final ItemStack railItem) {
+    public void placeContinuousRailAndConsumeRailItem(final Player player, final Block startRail) {
+
+        // メインハンドのレールアイテムからレールのブロックデータを生成する。
+        final ItemStack mainHandItem = player.getInventory().getItemInMainHand();
+        if (!(mainHandItem.getType().createBlockData() instanceof Rail rail)) {
+            throw new IllegalStateException("The main hand item must be rail-type: " + mainHandItem.getType().key());
+        }
 
         // プレイヤーの座標 (ピッチ) からBlockFaceの東西南北を計算する。
         final Vector direction = player.getLocation().getDirection();
         final BlockFace cardinalDirection = VectorUtil.cardinalDirection(direction);
 
-        // レールアイテムからブロックデータを生成する。
-        final BlockData railBlockData = railItem.getType().createBlockData();
-
         // 次に繋げるレールの場所を計算する。
-        final RailPlacementResult result = this.pathCalculator.findNextPlacementLocation(startRail, cardinalDirection, railBlockData);
+        final RailPlacementResult result = this.pathCalculator.findNextPlacementLocation(startRail, cardinalDirection, rail);
 
         switch (result) {
-            case RailPlacementResult.Success success -> this.replaceRail(player, success.foundPath(), railBlockData);
+            case RailPlacementResult.Success success -> this.replaceRail(player, success.foundPath(), rail);
             case RailPlacementResult.DistanceLimit ignored -> this.messageService.railPlaceDistanceLimit().send(player);
             case RailPlacementResult.NoSpace ignored -> this.messageService.railPlaceNoSpace().send(player);
         }
     }
 
     /**
-     * 指定されたブロックをレールに置換し、プレイヤーのインベントリからアイテムを消費します。
+     * 指定されたブロックをレールに置換し、プレイヤーがメインハンドに持っているレールアイテムを消費します。
      *
      * @param player レールを設置するプレイヤー
      * @param targetBlock 置換対象のブロック

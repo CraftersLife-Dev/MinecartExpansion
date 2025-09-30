@@ -19,6 +19,7 @@
  */
 package io.github.crafterslife.dev.minecartexpansion.translation;
 
+import io.github.crafterslife.dev.minecartexpansion.translation.spi.Actionbar;
 import io.github.namiuni.doburoku.annotation.Locales;
 import io.github.namiuni.doburoku.annotation.annotations.Key;
 import io.github.namiuni.doburoku.annotation.annotations.ResourceBundle;
@@ -31,7 +32,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @ApiStatus.NonExtendable
-@ResourceBundle(baseName = "translations/message")
+@ResourceBundle(baseName = "translations/messages")
 public interface MessageService {
 
     /**
@@ -39,7 +40,7 @@ public interface MessageService {
      *
      * @return メッセージインスタンス
      */
-    @Key("minecartexpansion.railplace.nospace")
+    @Key("minecartexpansion.rail-place.no_space")
     @Value(locale = Locales.EN_US, content = "<warn>No space available !")
     @Value(locale = Locales.JA_JP, content = "<warn>レールを設置するためのスペースがありません！")
     Actionbar railPlaceNoSpace();
@@ -49,7 +50,7 @@ public interface MessageService {
      *
      * @return メッセージインスタンス
      */
-    @Key("minecartexpansion.railplace.distance_limit")
+    @Key("minecartexpansion.rail-place.distance_limit")
     @Value(locale = Locales.EN_US, content = "<warn>The maximum distance for rail installation has been reached!")
     @Value(locale = Locales.JA_JP, content = "<warn>レールを設置できる最大距離に達しています！")
     Actionbar railPlaceDistanceLimit();

@@ -23,7 +23,7 @@ import io.github.crafterslife.dev.minecartexpansion.configuration.PrimaryConfig;
 import java.util.Optional;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Rail;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -64,22 +64,26 @@ public final class RailPlacementPathCalculator {
     /**
      * 指定された開始ブロックから、指定された方向に次にレールを配置する、または延伸する位置を見つけます。
      *
-     * @param startBlock 開始位置となるレールブロック
+     * @param startRailBlock 開始位置となるレールブロック
      * @param direction 探索する方向（東西南北）
-     * @param targetBlockData 配置を試みるレールブロックデータ
+     * @param targetRailData 配置を試みるレールブロックデータ
      * @return 探索結果を示す {@link RailPlacementResult}
      * @throws IllegalArgumentException 方向が水平方向でない場合
      */
     public RailPlacementResult findNextPlacementLocation(
-            final Block startBlock,
+            final Block startRailBlock,
             final BlockFace direction,
-            final BlockData targetBlockData
+            final Rail targetRailData
     ) {
+        if (!RailValidator.isRailBlock(startRailBlock)) {
+            throw new IllegalArgumentException("Block must be rail block: " + startRailBlock.getType().key());
+        }
+
         if (!HORIZONTAL_DIRECTIONS.contains(direction)) {
             throw new IllegalArgumentException("Direction must be horizontal: " + direction);
         }
 
-        Block currentBlock = startBlock;
+        Block currentBlock = startRailBlock;
         final int maxDistance = this.primaryConfig.railContinuousPlacementDistance();
 
         for (int distance = 1; distance <= maxDistance; distance++) {
@@ -93,7 +97,7 @@ public final class RailPlacementPathCalculator {
             }
 
             // 配置可能な座標を探す
-            return this.findBlockWithOffset(currentBlock, block -> this.canPlaceBlockData(block, targetBlockData))
+            return this.findBlockWithOffset(currentBlock, block -> this.canPlaceRailData(block, targetRailData))
                     .<RailPlacementResult>map(RailPlacementResult.Success::new)
                     .orElseGet(RailPlacementResult.NoSpace::new);
         }
@@ -119,13 +123,13 @@ public final class RailPlacementPathCalculator {
     }
 
     /**
-     * 指定されたブロックに、指定されたブロックデータが配置可能であり、かつそのブロックが置き換え可能であるかを判定します。
+     * 指定されたブロックに、指定されたレールブロックデータが配置可能であり、かつそのブロックが置き換え可能であるかを判定します。
      *
      * @param block 判定対象のブロック
-     * @param blockData 配置を試みるブロックデータ
+     * @param railData 配置を試みるレールブロックデータ
      * @return 配置可能かつ置き換え可能であれば {@code true}
      */
-    private boolean canPlaceBlockData(final Block block, final BlockData blockData) {
-        return block.canPlace(blockData) && block.isReplaceable();
+    private boolean canPlaceRailData(final Block block, final Rail railData) {
+        return block.canPlace(railData) && block.isReplaceable();
     }
 }

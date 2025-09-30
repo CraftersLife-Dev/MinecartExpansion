@@ -27,7 +27,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -47,10 +46,9 @@ public final class RailEventHandler implements Listener {
 
         final Player player = event.getPlayer();
         final Block clickedBlock = event.getClickedBlock();
-        final ItemStack mainHandItem = player.getInventory().getItemInMainHand();
 
         //noinspection DataFlowIssue
-        this.placementService.placeContinuousRail(player, clickedBlock, mainHandItem);
+        this.placementService.placeContinuousRailAndConsumeRailItem(player, clickedBlock);
     }
 
     private boolean isValidRailPlacementEvent(final PlayerInteractEvent event) {

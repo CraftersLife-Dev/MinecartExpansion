@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.translation;
+package io.github.crafterslife.dev.minecartexpansion.translation.spi;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;

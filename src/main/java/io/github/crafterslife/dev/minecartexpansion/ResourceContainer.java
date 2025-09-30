@@ -28,9 +28,9 @@ import io.github.crafterslife.dev.minecartexpansion.configuration.annotations.Co
 import io.github.crafterslife.dev.minecartexpansion.configuration.serializers.ExpressionSerializer;
 import io.github.crafterslife.dev.minecartexpansion.configuration.serializers.MaterialSerializer;
 import io.github.crafterslife.dev.minecartexpansion.integration.MiniPlaceholdersExpansion;
-import io.github.crafterslife.dev.minecartexpansion.translation.Actionbar;
+import io.github.crafterslife.dev.minecartexpansion.translation.spi.Actionbar;
 import io.github.crafterslife.dev.minecartexpansion.translation.DynamicResourceBundleControl;
-import io.github.crafterslife.dev.minecartexpansion.translation.Message;
+import io.github.crafterslife.dev.minecartexpansion.translation.spi.Message;
 import io.github.crafterslife.dev.minecartexpansion.translation.MessageService;
 import io.github.crafterslife.dev.minecartexpansion.translation.TranslationStoreInitializer;
 import io.github.namiuni.doburoku.standard.DoburokuStandard;

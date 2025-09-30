@@ -25,14 +25,14 @@ import io.papermc.paper.command.brigadier.Commands;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * <p>管理者用コマンド{@code /template}を処理する{@link InternalCommand}の実装です。</p>
+ * <p>管理者用コマンド{@code /template}を処理する{@link MinecartExpansionCommand}の実装です。</p>
  *
  * <p>このクラスは、プラグインの設定を再読み込みするなど、管理者向けのタスクを実行するための
  * サブコマンドを定義します。</p>
  */
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
-public final class AdminCommand implements InternalCommand {
+public final class AdminCommand implements MinecartExpansionCommand {
 
     /**
      * 管理者が使用するためのメインコマンドを構築します。

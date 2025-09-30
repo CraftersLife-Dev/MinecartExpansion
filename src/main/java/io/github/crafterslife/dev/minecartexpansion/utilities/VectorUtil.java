@@ -24,7 +24,7 @@ import org.bukkit.util.Vector;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Vector操作に関するユーティリティクラスです。
+ * Bukkitの {@link Vector} 操作に関するユーティリティクラスです。
  */
 @NullMarked
 public final class VectorUtil {
@@ -33,7 +33,7 @@ public final class VectorUtil {
     }
 
     /**
-     * Bukkitの {@code Vector} を東西南北の {@link BlockFace} へと変換します。
+     * {@code Vector} を東西南北の {@link BlockFace} へと変換します。
      * <p>
      * このメソッドは、ベクトルのX成分とZ成分の絶対値を比較し、より大きい成分の方向をそのベクトルの主要な方角として判断します。
      * </p>

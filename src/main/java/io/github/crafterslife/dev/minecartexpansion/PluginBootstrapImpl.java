@@ -20,7 +20,7 @@
 package io.github.crafterslife.dev.minecartexpansion;
 
 import io.github.crafterslife.dev.minecartexpansion.commands.AdminCommand;
-import io.github.crafterslife.dev.minecartexpansion.commands.InternalCommand;
+import io.github.crafterslife.dev.minecartexpansion.commands.MinecartExpansionCommand;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
@@ -47,7 +47,7 @@ public final class PluginBootstrapImpl implements PluginBootstrap {
 
         // Register commands
         context.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final InternalCommand adminCommand = new AdminCommand();
+            final MinecartExpansionCommand adminCommand = new AdminCommand();
             event.registrar().register(adminCommand.command(), adminCommand.description(), adminCommand.aliases());
         });
 
