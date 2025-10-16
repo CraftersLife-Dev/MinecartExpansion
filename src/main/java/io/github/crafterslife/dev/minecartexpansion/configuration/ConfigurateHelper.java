@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ public final class ConfigurateHelper {
      * @return デフォルト設定を定義するためのビルダーの最初のステップである{@link BasicStep}
      */
     @Contract("_ -> new")
-    public static <T extends Record, L extends ConfigurationLoader<?>> BasicStep<T, L> builder(final Class<T> model) {
+    public static <T, L extends ConfigurationLoader<?>> BasicStep<T, L> builder(final Class<T> model) {
         Objects.requireNonNull(model, "model");
         return new Builder<>(model);
     }
@@ -66,7 +66,7 @@ public final class ConfigurateHelper {
      * @param <T> レコードクラスの型
      * @param <L> {@link ConfigurationLoader}の型
      */
-    public sealed interface BasicStep<T extends Record, L extends ConfigurationLoader<?>> permits Builder {
+    public sealed interface BasicStep<T, L extends ConfigurationLoader<?>> permits Builder {
 
         /**
          * <p>設定ファイルが存在しない場合に使用されるデフォルト設定インスタンスを設定します。</p>
@@ -85,7 +85,7 @@ public final class ConfigurateHelper {
      * @param <T> レコードクラスの型
      * @param <L> {@link ConfigurationLoader}の型
      */
-    public sealed interface LoaderStep<T extends Record, L extends ConfigurationLoader<?>> permits Builder {
+    public sealed interface LoaderStep<T, L extends ConfigurationLoader<?>> permits Builder {
 
         /**
          * 設定ファイルを読み込みおよび保存する役割を担う{@link ConfigurationLoader}を設定します。
@@ -102,7 +102,7 @@ public final class ConfigurateHelper {
      * @param <T> レコードクラスの型
      * @param <L> {@link ConfigurationLoader}の型
      */
-    public sealed interface BuildableStep<T extends Record, L extends ConfigurationLoader<?>> permits Builder {
+    public sealed interface BuildableStep<T, L extends ConfigurationLoader<?>> permits Builder {
 
         /**
          * <p>バージョン管理された設定変換をビルダーに適用します。</p>
@@ -117,7 +117,7 @@ public final class ConfigurateHelper {
         /**
          * <p>ファイルを読み込み、変換を適用し、データをシリアライズして設定インスタンスをビルドします。</p>
          *
-         * <p>設定ファイルが存在しない場合、{@link BasicStep#defaultConfiguration(Record)}ステップで提供されたデフォルト値で作成されます。
+         * <p>設定ファイルが存在しない場合、{@link BasicStep#defaultConfiguration(Object)}ステップで提供されたデフォルト値で作成されます。
          * その後、ビルドされた設定が返されます。</p>
          *
          * @return 型{@code T}のビルドされた設定インスタンス
@@ -132,7 +132,7 @@ public final class ConfigurateHelper {
      * @param <T> レコードクラスの型
      * @param <L> {@link ConfigurationLoader}の型
      */
-    private static final class Builder<T extends Record, L extends ConfigurationLoader<?>> implements BasicStep<T, L>, LoaderStep<T, L>, BuildableStep<T, L> {
+    private static final class Builder<T, L extends ConfigurationLoader<?>> implements BasicStep<T, L>, LoaderStep<T, L>, BuildableStep<T, L> {
 
         private final Class<T> model;
         private @MonotonicNonNull T basic;
@@ -175,7 +175,11 @@ public final class ConfigurateHelper {
                 this.transformation.apply(node);
             }
 
-            final T config = node.get(this.model, this.basic);
+            final T config = node.get(this.model);
+            if (config == null) {
+                throw new ConfigurateException(node, "Failed to deserialize " + model.getName() + " from node");
+            }
+            node.set(this.model, config);
             this.loader.save(node);
 
             return config;

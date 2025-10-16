@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  */
 package io.github.crafterslife.dev.minecartexpansion.translation;
 
-import io.github.crafterslife.dev.minecartexpansion.minecraft.paper.PluginBootstrapImpl;
+import io.github.crafterslife.dev.minecartexpansion.PluginBootstrapImpl;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import java.util.List;
 import java.util.Locale;

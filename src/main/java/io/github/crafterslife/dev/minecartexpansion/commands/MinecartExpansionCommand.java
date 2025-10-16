@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.minecraft.paper.commands;
+package io.github.crafterslife.dev.minecartexpansion.commands;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -33,7 +33,7 @@ import org.jspecify.annotations.NullMarked;
  * 統一された方法で管理することです。</p>
  */
 @NullMarked
-public interface InternalCommand {
+public interface MinecartExpansionCommand {
 
     /**
      * コマンドのルートノードを構築し、返します。

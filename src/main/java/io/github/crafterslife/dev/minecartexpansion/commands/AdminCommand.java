@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.minecraft.paper.commands;
+package io.github.crafterslife.dev.minecartexpansion.commands;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.github.crafterslife.dev.minecartexpansion.ServiceContainer;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * <p>管理者用コマンド{@code /template}を処理する{@link InternalCommand}の実装です。</p>
+ * <p>管理者用コマンド{@code /template}を処理する{@link MinecartExpansionCommand}の実装です。</p>
  *
  * <p>このクラスは、プラグインの設定を再読み込みするなど、管理者向けのタスクを実行するための
  * サブコマンドを定義します。</p>
  */
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
-public final class AdminCommand implements InternalCommand {
-
-    private final ServiceContainer serviceContainer;
-
-    /**
-     * 新しい{@code AdminCommand}インスタンスを構築します。
-     *
-     * @param serviceContainer サービスロジックコンテナ
-     */
-    @Contract(pure = true)
-    public AdminCommand(final ServiceContainer serviceContainer) {
-        this.serviceContainer = serviceContainer;
-    }
+public final class AdminCommand implements MinecartExpansionCommand {
 
     /**
      * 管理者が使用するためのメインコマンドを構築します。

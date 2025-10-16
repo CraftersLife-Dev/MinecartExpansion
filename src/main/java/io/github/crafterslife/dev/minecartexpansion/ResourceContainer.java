@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,21 +19,22 @@
  */
 package io.github.crafterslife.dev.minecartexpansion;
 
+import com.ezylang.evalex.Expression;
 import io.github.crafterslife.dev.minecartexpansion.configuration.ConfigurateHelper;
 import io.github.crafterslife.dev.minecartexpansion.configuration.Header;
+import io.github.crafterslife.dev.minecartexpansion.configuration.PrimaryConfig;
 import io.github.crafterslife.dev.minecartexpansion.configuration.UncheckedConfigurateException;
 import io.github.crafterslife.dev.minecartexpansion.configuration.annotations.ConfigName;
-import io.github.crafterslife.dev.minecartexpansion.configuration.configurations.PrimaryConfig;
+import io.github.crafterslife.dev.minecartexpansion.configuration.serializers.ExpressionSerializer;
+import io.github.crafterslife.dev.minecartexpansion.configuration.serializers.MaterialSerializer;
 import io.github.crafterslife.dev.minecartexpansion.integration.MiniPlaceholdersExpansion;
+import io.github.crafterslife.dev.minecartexpansion.translation.spi.Actionbar;
 import io.github.crafterslife.dev.minecartexpansion.translation.DynamicResourceBundleControl;
-import io.github.crafterslife.dev.minecartexpansion.translation.Message;
+import io.github.crafterslife.dev.minecartexpansion.translation.spi.Message;
+import io.github.crafterslife.dev.minecartexpansion.translation.MessageService;
 import io.github.crafterslife.dev.minecartexpansion.translation.TranslationStoreInitializer;
-import io.github.crafterslife.dev.minecartexpansion.translation.annotations.LogLevel;
-import io.github.crafterslife.dev.minecartexpansion.translation.services.LoggingService;
-import io.github.crafterslife.dev.minecartexpansion.translation.services.MessageService;
 import io.github.namiuni.doburoku.standard.DoburokuStandard;
 import io.github.namiuni.doburoku.standard.argument.MiniMessageArgumentTransformer;
-import io.leangen.geantyref.TypeToken;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,12 +47,10 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.translation.Argument;
-import net.kyori.adventure.util.UTF8ResourceBundleControl;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.event.Level;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -61,14 +60,12 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
  *
  * @param primaryConfig  プラグインの設定
  * @param messageService メッセージサービス
- * @param loggingService ロギングサービス
  */
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
 public record ResourceContainer(
         PrimaryConfig primaryConfig,
-        MessageService messageService,
-        LoggingService loggingService
+        MessageService messageService
 ) {
 
     /**
@@ -78,16 +75,17 @@ public record ResourceContainer(
      * @return このレコードのインスタンス
      */
     public static ResourceContainer create(final PluginProviderContext context) {
-        final LoggingService loggingService = ResourceContainer.createLoggingService(context);
-        final MessageService messageService = ResourceContainer.createMessageService(context, loggingService);
-        final PrimaryConfig primaryConfig = ResourceContainer.createConfig(context, loggingService, PrimaryConfig.class, PrimaryConfig.DEFAULT);
+        final MessageService messageService = ResourceContainer.createMessageService(context);
 
-        return new ResourceContainer(primaryConfig, messageService, loggingService);
+        final PrimaryConfig primaryConfig = ResourceContainer.createConfig(context, PrimaryConfig.class, new PrimaryConfig());
+        final String configName = PrimaryConfig.class.getAnnotation(ConfigName.class).value();
+        context.getLogger().info("設定を読み込みました: {}", configName);
+
+        return new ResourceContainer(primaryConfig, messageService);
     }
 
-    private static <T extends Record> T createConfig(
+    private static <T> T createConfig(
             final PluginProviderContext context,
-            final LoggingService loggingService,
             final Class<T> model,
             final T base
     ) throws UncheckedConfigurateException {
@@ -99,12 +97,14 @@ public record ResourceContainer(
                             .defaultOptions(options -> options
                                     .shouldCopyDefaults(true)
                                     .header(model.getAnnotation(Header.class).value())
-                                    .serializers(ConfigurateComponentSerializer.configurate().serializers()))
+                                    .serializers(builder -> builder
+                                            .registerAll(ConfigurateComponentSerializer.configurate().serializers())
+                                            .register(Expression.class, new ExpressionSerializer())
+                                            .register(Material.class, new MaterialSerializer())
+                                    ))
                             .path(context.getDataDirectory().resolve(model.getAnnotation(ConfigName.class).value()))
                             .build())
                     .build();
-
-            loggingService.configurationLoaded(PrimaryConfig.class.getAnnotation(ConfigName.class).value());
 
             return config;
         } catch (final ConfigurateException exception) {
@@ -112,57 +112,25 @@ public record ResourceContainer(
         }
     }
 
-    private static LoggingService createLoggingService(final PluginProviderContext context) {
-
-        TranslationStoreInitializer.initialize(
-                context,
-                LoggingService.class,
-                UTF8ResourceBundleControl.utf8ResourceBundleControl()
-        );
-
-        final ComponentLogger logger = context.getLogger();
-        return DoburokuStandard.of(LoggingService.class)
-                .argument(registry -> {
-                    registry.plus(new TypeToken<Collection<Locale>>() {
-                    }, (parameter, locales) -> {
-                        final List<TextComponent> components = locales.stream()
-                                .map(Locale::getDisplayName)
-                                .map(Component::text)
-                                .toList();
-                        final JoinConfiguration joinConfig = JoinConfiguration.arrayLike();
-                        return Component.join(joinConfig, components);
-                    });
-                }, MiniMessageArgumentTransformer.create())
-                .result(registry -> registry
-                        .plus(void.class, (method, component) -> {
-                            final Level level = method.getAnnotation(LogLevel.class).value();
-                            switch (level) {
-                                case INFO -> logger.info(component);
-                                case WARN -> logger.warn(component);
-                                case ERROR -> logger.error(component);
-                                case DEBUG -> logger.debug(component);
-                                case TRACE -> logger.trace(component);
-                            }
-                            return null;
-                        }))
-                .brew();
-    }
-
-    private static MessageService createMessageService(final PluginProviderContext context, final LoggingService loggingService) {
+    private static MessageService createMessageService(final PluginProviderContext context) {
         final ResourceBundle.Control control = new DynamicResourceBundleControl(context.getDataDirectory());
         final Collection<Locale> installedLocales = TranslationStoreInitializer.initialize(
                 context,
                 MessageService.class,
                 control
         );
-        loggingService.translationLoaded(installedLocales.size(), installedLocales);
+        final List<TextComponent> localeNames = installedLocales.stream()
+                .map(Locale::getDisplayName)
+                .map(Component::text)
+                .toList();
+        final Component formattedLocaleNames = Component.join(JoinConfiguration.arrayLike(), localeNames);
+        context.getLogger().info("{}件の翻訳を読み込みました: {}", installedLocales.size(), formattedLocaleNames);
 
         return DoburokuStandard.of(MessageService.class)
                 .argument(registry -> registry.plus(Player.class, (parameter, player) -> player.displayName()),
                         MiniMessageArgumentTransformer.create())
                 .result(registry -> registry
                         .plus(Message.class, (method, component) -> audience -> {
-
                             // MiniPlaceholdersのプレースホルダーと解決に必要なオーディエンスを追加
                             final List<ComponentLike> arguments = new ArrayList<>(component.arguments());
                             arguments.add(Argument.tagResolver(MiniPlaceholdersExpansion.audiencePlaceholders()));
@@ -171,6 +139,16 @@ public record ResourceContainer(
                             // TranslatableComponentを生成してオーディエンスに送信
                             final TranslatableComponent result = Component.translatable(component.key(), arguments);
                             audience.sendMessage(result);
+                        })
+                        .plus(Actionbar.class, (method, component) -> audience -> {
+                            // MiniPlaceholdersのプレースホルダーと解決に必要なオーディエンスを追加
+                            final List<ComponentLike> arguments = new ArrayList<>(component.arguments());
+                            arguments.add(Argument.tagResolver(MiniPlaceholdersExpansion.audiencePlaceholders()));
+                            arguments.add(Argument.target(audience));
+
+                            // TranslatableComponentを生成してオーディエンスに送信
+                            final TranslatableComponent result = Component.translatable(component.key(), arguments);
+                            audience.sendActionBar(result);
                         }))
                 .brew();
     }

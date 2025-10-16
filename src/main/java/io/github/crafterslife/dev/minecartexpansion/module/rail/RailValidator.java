@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.translation.annotations;
+package io.github.crafterslife.dev.minecartexpansion.module.rail;
 
-import io.github.crafterslife.dev.minecartexpansion.translation.services.LoggingService;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.Rail;
+import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.event.Level;
 
 /**
- * {@link LoggingService}で使用するログレベルアノテーション。
+ * {@link Block} または {@link ItemStack} が レールを表すかどうかを検証するためのユーティリティクラス。
  */
-@Retention(RetentionPolicy.RUNTIME)
 @NullMarked
-public @interface LogLevel {
+public final class RailValidator {
 
-    /**
-     * 出力するログのレベル。
-     *
-     * @return ログのレベル
-     */
-    Level value();
+    private RailValidator() {
+    }
+
+    public static boolean isRailBlock(final Block block) {
+        return block.getBlockData() instanceof Rail;
+    }
+
+    public static boolean isRailItem(final ItemStack item) {
+        return item.getType().createBlockData() instanceof Rail;
+    }
 }

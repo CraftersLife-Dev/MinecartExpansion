@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.minecraft.paper;
+package io.github.crafterslife.dev.minecartexpansion;
 
-import io.github.crafterslife.dev.minecartexpansion.ResourceContainer;
-import io.github.crafterslife.dev.minecartexpansion.minecraft.paper.listeners.RailSpeedListener;
+import io.github.crafterslife.dev.minecartexpansion.event.MinecartEventHandler;
+import io.github.crafterslife.dev.minecartexpansion.event.RailEventHandler;
+import io.github.crafterslife.dev.minecartexpansion.module.rail.ContinuousRailPlacementService;
+import io.github.crafterslife.dev.minecartexpansion.module.minecart.MinecartMaxSpeedChanger;
+import io.github.crafterslife.dev.minecartexpansion.module.minecart.MinecartVelocityModifier;
+import io.github.crafterslife.dev.minecartexpansion.module.rail.RailPlacementPathCalculator;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
@@ -46,7 +50,14 @@ public final class JavaPluginImpl extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        /* templateServiceをリスナーに渡す */
-        Bukkit.getPluginManager().registerEvents(new RailSpeedListener(resourceContainer.primaryConfig()), this);
+        final var maxSpeedChanger = new MinecartMaxSpeedChanger(this.resourceContainer.primaryConfig());
+        final var velocityModifier = new MinecartVelocityModifier(this.getComponentLogger(), this.resourceContainer.primaryConfig());
+        final var minecartListener = new MinecartEventHandler(velocityModifier, maxSpeedChanger);
+        Bukkit.getPluginManager().registerEvents(minecartListener, this);
+
+        final var pathCalculator = new RailPlacementPathCalculator(this.resourceContainer.primaryConfig());
+        final var railPlacementManager = new ContinuousRailPlacementService(pathCalculator, this.resourceContainer.messageService());
+        final var railListener = new RailEventHandler(railPlacementManager);
+        Bukkit.getPluginManager().registerEvents(railListener,this);
     }
 }

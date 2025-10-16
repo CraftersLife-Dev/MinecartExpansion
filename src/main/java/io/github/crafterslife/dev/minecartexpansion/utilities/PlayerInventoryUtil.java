@@ -17,23 +17,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.configuration.annotations;
+package io.github.crafterslife.dev.minecartexpansion.utilities;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * 設定ファイル名を表すアノテーション。
+ * プレイヤーのインベントリ操作に関するユーティリティクラスです。
  */
-@Retention(RetentionPolicy.RUNTIME)
 @NullMarked
-public @interface ConfigName {
+public final class PlayerInventoryUtil {
+
+    private PlayerInventoryUtil() {
+    }
 
     /**
-     * 設定ファイルの名前。
+     * プレイヤーのメインハンドにあるアイテムを1つ消費します。
      *
-     * @return 設定ファイル名
+     * @param player アイテムを消費する {@link Player}
      */
-    String value();
+    public static void consumeMainHandItem(final Player player) {
+        final ItemStack mainHandItem = player.getInventory().getItemInMainHand();
+        final int newAmount = Math.max(0, mainHandItem.getAmount() - 1);
+        mainHandItem.setAmount(newAmount);
+    }
 }

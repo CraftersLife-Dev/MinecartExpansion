@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.minecraft.paper;
+package io.github.crafterslife.dev.minecartexpansion;
 
-import io.github.crafterslife.dev.minecartexpansion.ResourceContainer;
-import io.github.crafterslife.dev.minecartexpansion.ServiceContainer;
-import io.github.crafterslife.dev.minecartexpansion.minecraft.paper.commands.AdminCommand;
-import io.github.crafterslife.dev.minecartexpansion.minecraft.paper.commands.InternalCommand;
+import io.github.crafterslife.dev.minecartexpansion.commands.AdminCommand;
+import io.github.crafterslife.dev.minecartexpansion.commands.MinecartExpansionCommand;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
@@ -46,11 +44,10 @@ public final class PluginBootstrapImpl implements PluginBootstrap {
 
         // Create resource container
         final ResourceContainer resourceContainer = ResourceContainer.create(context);
-        final ServiceContainer serviceContainer = ServiceContainer.create(resourceContainer);
 
         // Register commands
         context.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final InternalCommand adminCommand = new AdminCommand(serviceContainer);
+            final MinecartExpansionCommand adminCommand = new AdminCommand();
             event.registrar().register(adminCommand.command(), adminCommand.description(), adminCommand.aliases());
         });
 

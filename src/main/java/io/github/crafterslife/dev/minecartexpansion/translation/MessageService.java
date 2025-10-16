@@ -1,8 +1,8 @@
 /*
- * MinecartBoost
+ * MinecartExpansion
  *
  * Copyright (c) 2025. すだち
- *                     Contributors []
+ *                     Contributors [Namiu (うにたろう)]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package io.github.crafterslife.dev.minecartexpansion.translation.services;
+package io.github.crafterslife.dev.minecartexpansion.translation;
 
-import io.github.crafterslife.dev.minecartexpansion.translation.Message;
+import io.github.crafterslife.dev.minecartexpansion.translation.spi.Actionbar;
 import io.github.namiuni.doburoku.annotation.Locales;
 import io.github.namiuni.doburoku.annotation.annotations.Key;
 import io.github.namiuni.doburoku.annotation.annotations.ResourceBundle;
@@ -32,16 +32,26 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @ApiStatus.NonExtendable
-@ResourceBundle(baseName = "translations/message")
+@ResourceBundle(baseName = "translations/messages")
 public interface MessageService {
 
     /**
-     * サンプルメッセージ
+     * レール延伸機能の使用時に、設置スペースが足りないときに送信するメッセージ。
      *
      * @return メッセージインスタンス
      */
-    @Key("template.sample")
-    @Value(locale = Locales.EN_US, content = "<info>Hello, World!")
-    @Value(locale = Locales.JA_JP, content = "<info>こんにちは、世界！")
-    Message sample();
+    @Key("minecartexpansion.rail-place.no_space")
+    @Value(locale = Locales.EN_US, content = "<warn>No space available !")
+    @Value(locale = Locales.JA_JP, content = "<warn>レールを設置するためのスペースがありません！")
+    Actionbar railPlaceNoSpace();
+
+    /**
+     * レール延伸機能の使用時に、設置可能な最長距離に達しているときに送信するメッセージ。
+     *
+     * @return メッセージインスタンス
+     */
+    @Key("minecartexpansion.rail-place.distance_limit")
+    @Value(locale = Locales.EN_US, content = "<warn>The maximum distance for rail installation has been reached!")
+    @Value(locale = Locales.JA_JP, content = "<warn>レールを設置できる最大距離に達しています！")
+    Actionbar railPlaceDistanceLimit();
 }
