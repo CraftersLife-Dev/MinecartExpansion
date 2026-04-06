@@ -83,8 +83,8 @@ public final class ContinuousRailPlacementService {
 
         switch (result) {
             case RailPlacementResult.Success success -> this.replaceRail(player, success.foundPath(), rail);
-            case RailPlacementResult.DistanceLimit ignored -> this.messageService.railPlaceDistanceLimit().send(player);
-            case RailPlacementResult.NoSpace ignored -> this.messageService.railPlaceNoSpace().send(player);
+            case RailPlacementResult.DistanceLimit ignored -> player.sendActionBar(this.messageService.railPlaceDistanceLimit());
+            case RailPlacementResult.NoSpace ignored -> player.sendActionBar(this.messageService.railPlaceNoSpace());
         }
     }
 

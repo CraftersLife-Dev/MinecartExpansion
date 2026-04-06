@@ -19,19 +19,17 @@
  */
 package io.github.crafterslife.dev.minecartexpansion.translation;
 
-import io.github.crafterslife.dev.minecartexpansion.translation.spi.Actionbar;
-import io.github.namiuni.doburoku.annotation.Locales;
-import io.github.namiuni.doburoku.annotation.annotations.Key;
-import io.github.namiuni.doburoku.annotation.annotations.ResourceBundle;
-import io.github.namiuni.doburoku.annotation.annotations.Value;
-import org.jetbrains.annotations.ApiStatus;
+import io.github.namiuni.kotonoha.annotations.Key;
+import io.github.namiuni.kotonoha.annotations.Locales;
+import io.github.namiuni.kotonoha.annotations.Message;
+import io.github.namiuni.kotonoha.annotations.ResourceBundle;
+import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
 
 /**
  * プレイヤーなどに送信するメッセージを管理するためのサービスインターフェース。
  */
 @NullMarked
-@ApiStatus.NonExtendable
 @ResourceBundle(baseName = "translations/messages")
 public interface MessageService {
 
@@ -41,9 +39,9 @@ public interface MessageService {
      * @return メッセージインスタンス
      */
     @Key("minecartexpansion.rail-place.no_space")
-    @Value(locale = Locales.EN_US, content = "<warn>No space available !")
-    @Value(locale = Locales.JA_JP, content = "<warn>レールを設置するためのスペースがありません！")
-    Actionbar railPlaceNoSpace();
+    @Message(locale = Locales.EN_US, content = "<warn>No space available !")
+    @Message(locale = Locales.JA_JP, content = "<warn>レールを設置するためのスペースがありません！")
+    Component railPlaceNoSpace();
 
     /**
      * レール延伸機能の使用時に、設置可能な最長距離に達しているときに送信するメッセージ。
@@ -51,7 +49,7 @@ public interface MessageService {
      * @return メッセージインスタンス
      */
     @Key("minecartexpansion.rail-place.distance_limit")
-    @Value(locale = Locales.EN_US, content = "<warn>The maximum distance for rail installation has been reached!")
-    @Value(locale = Locales.JA_JP, content = "<warn>レールを設置できる最大距離に達しています！")
-    Actionbar railPlaceDistanceLimit();
+    @Message(locale = Locales.EN_US, content = "<warn>The maximum distance for rail installation has been reached!")
+    @Message(locale = Locales.JA_JP, content = "<warn>レールを設置できる最大距離に達しています！")
+    Component railPlaceDistanceLimit();
 }
