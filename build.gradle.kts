@@ -28,11 +28,10 @@ dependencies {
     // Libraries
     compileOnly(libs.configurate.yaml) // Paperに組み込んである
     runtimeDownload(libs.adventure.serializer.configurate)
-    implementation(libs.doburoku.standard)
+    implementation(libs.kotonoha.message)
+    implementation(libs.kotonoha.message.extra.miniplaceholders)
+    implementation(libs.kotonoha.translator)
     implementation(libs.evalex)
-
-    // Annotation processor
-    annotationProcessor(libs.doburoku.annotation.processor)
 }
 
 val mainPackage = "$group.minecartexpansion"
